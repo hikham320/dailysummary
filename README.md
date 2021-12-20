@@ -107,7 +107,7 @@ https://console.cloud.google.com/projectcreate にアクセスします。
 ```
 # ホームフォルダにある .bashrc（.zshrc） に追加:
 daily-summary () {
-    ~/dailysummary/make
+    ~/dailysummary/make $*
 }
 ```
 ### そもそも普段はターミナルを使わない
@@ -119,4 +119,6 @@ daily-summary () {
 ### コードに色々問題がある
 `summary_maker` フォルダ内にコードなどがあります。いじってみてください。
 ### コードがアホっぽい
+`summary_maker` フォルダ内にコードなどがあります。いじってみてください。
+### `[INSERT PACKAGE NAME HERE]` は使わないの？
 `summary_maker` フォルダ内にコードなどがあります。いじってみてください。
