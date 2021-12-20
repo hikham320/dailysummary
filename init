@@ -1,0 +1,20 @@
+#!/bin/sh
+cd `dirname $0`
+
+which python3 > /dev/null 2>&1
+
+if [ $? -eq 1 ]; then
+    echo 'init: Python3 が見つかりません。 正しくインストールされているか確認してください。'
+    exit 1
+fi
+
+if [ ! -d "venv/bin/" ]; then
+    echo 'init: 仮想環境を作成しています...'
+    python3 -m venv venv
+    . venv/bin/activate
+    pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib > /dev/null 2>&1
+fi
+
+. venv/bin/activate
+cd summary_maker
+python3 init.py $*
