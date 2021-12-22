@@ -22,13 +22,19 @@ def format_eventname(evname):
 
 def process_total(evlist):
     try:
-        email = config.EMAIL_ADDRESS
+        emaillist = config.EMAIL_ADDRESS.split(',')
     except:
-        email = None
+        emaillist = None
+    
     event_list = {}
     for event in evlist:
-        if email:
-            if event['creator']['email'] != email:
+        if emaillist:
+            valid = False
+            for email in emaillist:
+                if event['creator']['email'] == email.strip():
+                    valid = True
+                    break
+            if not valid:
                 continue
         
         start = datetime.datetime.strptime(
@@ -81,10 +87,10 @@ def process_daily(evlist):
 def print_events(evlist):
     try:
         for k, v in evlist.items():
-            print('{} : {:.2f} 時間'.format( k, v.seconds / 3600.00 ) )
+            print('{} : {:.2f} 時間'.format( k, v.total_seconds() / 3600.00 ) )
     except:
         for k1, v1 in evlist.items():
             print('■ ' + datetime.datetime.strptime(k1, '%Y-%m-%d').strftime('%Y年%m月%d日') )
             for k2, v2 in v1.items():
-                print('{} : {:.2f} 時間'.format( k2, v2.seconds / 3600.00 ) )
+                print('{} : {:.2f} 時間'.format( k2, v2.total_seconds() / 3600.00 ) )
             print('')
