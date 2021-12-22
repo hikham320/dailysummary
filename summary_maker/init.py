@@ -1,4 +1,4 @@
-import auth, get
+import auth, get, os
 try:
     import config
 except:
@@ -21,6 +21,15 @@ def initmain():
     try:
         auth.authenticate()
     except:
+        try:
+            os.remove('credentials.json')
+        except:
+            pass
+        try:
+            os.remove('token.pickle')
+        except:
+            pass
+        
         print('init: 認証用ファイルの作成を行います。')
         print('init: client_secret_*****.json ファイルを Google Cloud Platform からダウンロードして開き、中身をそのままコンソールに貼り付けてください。')
         print('init: 詳細はマニュアル（README.md）を参照してください。')
