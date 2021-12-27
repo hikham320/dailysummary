@@ -22,4 +22,9 @@ def daily(date1=None, date2=None):
     
 def total(date1=None, date2=None):
     events = make(date1, date2)
+    
+    print('■ {} -- {}'.format(
+        datetime.datetime.strptime(date1, '%Y-%m-%d').strftime('%Y年%m月%d日'),
+        datetime.datetime.strptime(date2, '%Y-%m-%d').strftime('%Y年%m月%d日')
+    ) )
     format.print_events( format.process_total( events ) )

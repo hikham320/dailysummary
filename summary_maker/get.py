@@ -28,10 +28,13 @@ def retrieve_events(service, date_from=None, date_to=None):
     evlist = []
     time_min_datetime = datetime.datetime.strptime( time_min, '%Y-%m-%dT%H:%M:%S.%f+0900')
     for event in events:
-        start = datetime.datetime.strptime(
-            event['start'].get('dateTime', event['start'].get('date')),
-            '%Y-%m-%dT%H:%M:%S+09:00'
-        )
+        try:
+            start = datetime.datetime.strptime(
+                event['start'].get('dateTime', event['start'].get('date')),
+                '%Y-%m-%dT%H:%M:%S+09:00'
+            )
+        except:
+            continue
         if start < time_min_datetime:
             continue
         evlist.append(event)

@@ -20,29 +20,41 @@ def format_eventname(evname):
         return backlog_format.sub("\\2 (\\1)", evname)
     return evname + " (チケットなし)"
 
-def process_total(evlist):
+
+def process_event(event):
     try:
         emaillist = config.EMAIL_ADDRESS.split(',')
     except:
         emaillist = None
-    
-    event_list = {}
-    for event in evlist:
-        if emaillist:
-            valid = False
-            for email in emaillist:
-                if event['creator']['email'] == email.strip():
-                    valid = True
-                    break
-            if not valid:
-                continue
-        
+    if emaillist:
+        valid = False
+        for email in emaillist:
+            if event['creator']['email'] == email.strip():
+                valid = True
+                break
+        if not valid:
+            return False
+    try:
         start = datetime.datetime.strptime(
             event['start'].get('dateTime', event['start'].get('date')),
             '%Y-%m-%dT%H:%M:%S+09:00')
         end = datetime.datetime.strptime(
             event['end'].get('dateTime', event['end'].get('date')),
             '%Y-%m-%dT%H:%M:%S+09:00')
+    except:
+        return False
+    return {'start': start, 'end': end}
+
+
+def process_total(evlist):
+    event_list = {}
+    for event in evlist:
+        
+        _ = process_event(event)
+        if not _:
+            continue
+        start = _['start']
+        end = _['end']
         
         eventname = format_eventname(event['summary'])
         if not eventname in event_list:
@@ -59,16 +71,12 @@ def process_daily(evlist):
         email = None
     event_list = {}
     for event in evlist:
-        if email:
-            if event['creator']['email'] != email:
-                continue
         
-        start = datetime.datetime.strptime(
-            event['start'].get('dateTime', event['start'].get('date')),
-            '%Y-%m-%dT%H:%M:%S+09:00')
-        end = datetime.datetime.strptime(
-            event['end'].get('dateTime', event['end'].get('date')),
-            '%Y-%m-%dT%H:%M:%S+09:00')
+        _ = process_event(event)
+        if not _:
+            continue
+        start = _['start']
+        end = _['end']
         
         target_date = start - datetime.timedelta(hours=6)
         target_date_str = datetime.datetime.strftime(target_date, '%Y-%m-%d')
