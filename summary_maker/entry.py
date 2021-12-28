@@ -43,6 +43,9 @@ def entry():
     if arg1 == 'total':
         make.total(arg2, arg3)
         return
+    if arg1 == 'time':
+        make.timebased(arg2, arg3)
+        return
     try:
         _ = datetime.datetime.strptime(arg1, '%Y-%m-%d')
     except:

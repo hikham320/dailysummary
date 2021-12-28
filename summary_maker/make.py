@@ -15,6 +15,22 @@ def make(date1=None, date2=None):
     
     return events
 
+
+def timebased(date1=None, date2=None):
+    events = make(date1, date2)
+    for ev in events:
+        try:
+            start = datetime.datetime.strptime(
+                ev['start'].get('dateTime', ev['start'].get('date')),
+                '%Y-%m-%dT%H:%M:%S+09:00')
+            end = datetime.datetime.strptime(
+                ev['end'].get('dateTime', ev['end'].get('date')),
+                '%Y-%m-%dT%H:%M:%S+09:00')
+        except:
+            continue
+        print('{}-{} {}'.format(start.strftime('%H:%M'), end.strftime('%H:%M'), ev['summary']))
+
+    
 def daily(date1=None, date2=None):
     events = make(date1, date2)
     format.print_events( format.process_daily( events ) )

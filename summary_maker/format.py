@@ -71,7 +71,7 @@ def process_daily(evlist):
         email = None
     event_list = {}
     for event in evlist:
-        
+
         _ = process_event(event)
         if not _:
             continue
